@@ -16,7 +16,7 @@ export class UsersController {
   @Get()
   @ApiBody({ type: PaginatedUsersDto })
   async getAll(@Query() query: PaginatedQuery) {
-    console.log('HEI');
+    console.log('HEi');
     return await this.usersService.findAll(parsePaginatedQuery(query));
   }
 }
