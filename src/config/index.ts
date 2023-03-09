@@ -1,6 +1,6 @@
-import { AppConfig } from './app.config';
-import { JwtConfig } from './jwt.config';
-import { SecurityConfig } from './security.config';
+import type { AppConfig } from './app.config';
+import type { JwtConfig } from './jwt.config';
+import type { SecurityConfig } from './security.config';
 
 export interface EnvironmentConfig {
   app: AppConfig;

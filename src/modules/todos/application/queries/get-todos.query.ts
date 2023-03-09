@@ -1,16 +1,14 @@
-import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+import type { IQueryHandler } from '@nestjs/cqrs';
+import { QueryHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+
 import { Todo } from '../../infrastructure/entities/todos.entity';
 
-export class GetTodosQuery {
-  constructor() {}
-}
+export class GetTodosQuery {}
 
 @QueryHandler(GetTodosQuery)
-export class GetTodosQueryHandler
-  implements IQueryHandler<GetTodosQuery, Todo[]>
-{
+export class GetTodosQueryHandler implements IQueryHandler<GetTodosQuery, Todo[]> {
   constructor(
     @InjectRepository(Todo)
     private todosRepository: Repository<Todo>,

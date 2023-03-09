@@ -2,21 +2,19 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { join } from 'path';
+import { AcceptLanguageResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
+import * as path from 'path';
 import { DataSource } from 'typeorm';
 import { addTransactionalDataSource } from 'typeorm-transactional';
-import * as path from 'path';
-import { AcceptLanguageResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
 
 import appConfig from './config/app.config';
-import securityConfig from './config/security.config';
-import jwtConfig from './config/jwt.config';
 import databaseConfig from './config/database.config';
-
+import jwtConfig from './config/jwt.config';
+import securityConfig from './config/security.config';
+import { TypeOrmConfigService } from './database/typeorm-config.service';
+import { AuthModule } from './modules/auth/auth.module';
 import { TodosModule } from './modules/todos/todos.module';
 import { UsersModule } from './modules/users/users.module';
-import { AuthModule } from './modules/auth/auth.module';
-import { TypeOrmConfigService } from './database/typeorm-config.service';
 
 @Module({
   imports: [
@@ -48,10 +46,7 @@ import { TypeOrmConfigService } from './database/typeorm-config.service';
         fallbackLanguage: configService.get('app.fallbackLanguage'),
         loaderOptions: { path: path.join(__dirname, '/i18n/'), watch: true },
       }),
-      resolvers: [
-        { use: QueryResolver, options: ['lang'] },
-        AcceptLanguageResolver,
-      ],
+      resolvers: [{ use: QueryResolver, options: ['lang'] }, AcceptLanguageResolver],
       imports: [ConfigModule],
       inject: [ConfigService],
     }),

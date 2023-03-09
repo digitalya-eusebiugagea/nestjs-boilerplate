@@ -1,20 +1,11 @@
-import {
-  ExceptionFilter,
-  Catch,
-  ArgumentsHost,
-  HttpException,
-  InternalServerErrorException,
-  Logger,
-} from '@nestjs/common';
+import type { ArgumentsHost, ExceptionFilter } from '@nestjs/common';
+import { Catch, HttpException, InternalServerErrorException, Logger } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 
 @Catch()
 export class HttpLoggingExceptionFilter implements ExceptionFilter {
-  constructor(
-    private readonly httpAdapterHost: HttpAdapterHost,
-    private readonly logger: Logger,
-  ) {}
+  constructor(private readonly httpAdapterHost: HttpAdapterHost, private readonly logger: Logger) {}
 
   catch(exception: Error, host: ArgumentsHost): void {
     // In certain situations `httpAdapter` might not be available in the

@@ -1,6 +1,4 @@
-import { User } from './../users/user.entity';
-import { CreateUserDto } from '../users/create-user.dto';
-import { Controller, Request, Post, UseGuards, Body } from '@nestjs/common';
+import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
 import {
   ApiBody,
   ApiCreatedResponse,
@@ -8,9 +6,12 @@ import {
   ApiNotFoundResponse,
   ApiTags,
 } from '@nestjs/swagger';
+
+import { CreateUserDto } from '../users/create-user.dto';
+import { UsersService } from '../users/users.service';
+import { User } from './../users/user.entity';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './local/local-auth.guard';
-import { UsersService } from '../users/users.service';
 import { LoginResponseDto } from './login-response.dto';
 
 @ApiTags('auth')

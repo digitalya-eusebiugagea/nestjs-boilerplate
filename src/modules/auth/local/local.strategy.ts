@@ -1,6 +1,8 @@
-import { Strategy } from 'passport-local';
-import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { PassportStrategy } from '@nestjs/passport';
+// eslint-disable-next-line import/named
+import { Strategy } from 'passport-local';
+
 import { AuthService } from '../auth.service';
 
 @Injectable()

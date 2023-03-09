@@ -1,8 +1,10 @@
 import { Logger } from '@nestjs/common';
-import { ICommandHandler, CommandHandler } from '@nestjs/cqrs';
+import type { ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateTodoDto } from '../../infrastructure/dtos/create-todo.dto';
+
+import type { CreateTodoDto } from '../../infrastructure/dtos/create-todo.dto';
 import { Todo } from '../../infrastructure/entities/todos.entity';
 
 export class CreateTodoCommand {
@@ -10,9 +12,7 @@ export class CreateTodoCommand {
 }
 
 @CommandHandler(CreateTodoCommand)
-export class CreateTodoCommandHandler
-  implements ICommandHandler<CreateTodoCommand, Todo>
-{
+export class CreateTodoCommandHandler implements ICommandHandler<CreateTodoCommand, Todo> {
   constructor(
     @InjectRepository(Todo)
     private todosRepository: Repository<Todo>,

@@ -19,8 +19,8 @@ export class Pagination {
 }
 
 export const parsePaginatedQuery = (paginatedQuery: PaginatedQuery): Pagination => {
-  const take = paginatedQuery.take && parseInt(paginatedQuery.take);
-  const skip = paginatedQuery.skip && parseInt(paginatedQuery.skip);
+  const take = paginatedQuery?.take && parseInt(paginatedQuery.take);
+  const skip = paginatedQuery?.skip && parseInt(paginatedQuery.skip);
 
   return { take, skip };
 };

@@ -1,7 +1,9 @@
 import { Logger, NotFoundException } from '@nestjs/common';
-import { ICommandHandler, CommandHandler } from '@nestjs/cqrs';
+import type { ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+
 import { Todo } from '../../infrastructure/entities/todos.entity';
 
 export class DeleteTodoCommand {
@@ -9,9 +11,7 @@ export class DeleteTodoCommand {
 }
 
 @CommandHandler(DeleteTodoCommand)
-export class DeleteTodoCommandHandler
-  implements ICommandHandler<DeleteTodoCommand, boolean>
-{
+export class DeleteTodoCommandHandler implements ICommandHandler<DeleteTodoCommand, boolean> {
   constructor(
     @InjectRepository(Todo)
     private todosRepository: Repository<Todo>,

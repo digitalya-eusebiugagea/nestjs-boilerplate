@@ -1,9 +1,10 @@
-import { UsersService } from './../../users/users.service';
-import { ExtractJwt, Strategy } from 'passport-jwt';
-import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { User } from 'src/modules/users/user.entity';
+import { PassportStrategy } from '@nestjs/passport';
+import { ExtractJwt, Strategy } from 'passport-jwt';
+import type { User } from 'src/modules/users/user.entity';
+
+import { UsersService } from './../../users/users.service';
 
 type JwtPayload = Pick<User, 'username'> & { sub: number; iat: number; exp: number };
 

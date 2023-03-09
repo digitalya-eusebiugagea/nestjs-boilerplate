@@ -8,28 +8,25 @@ import {
   UseFilters,
   UseGuards,
   UseInterceptors,
-  Request,
 } from '@nestjs/common';
-
-import { Todo } from '../entities/todos.entity';
-import { CreateTodoDto } from '../dtos/create-todo.dto';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import {
-  ApiTags,
-  ApiNotFoundResponse,
-  ApiUnprocessableEntityResponse,
-  ApiInternalServerErrorResponse,
   ApiBearerAuth,
+  ApiInternalServerErrorResponse,
+  ApiNotFoundResponse,
+  ApiTags,
+  ApiUnprocessableEntityResponse,
 } from '@nestjs/swagger';
-import { QueryBus, CommandBus } from '@nestjs/cqrs';
-import { GetTodosQuery } from '../../application/queries/get-todos.query';
-import { CreateTodoCommand } from '../../application/commands/create-todo.command';
-import { DeleteTodoCommand } from '../../application/commands/delete-todo.command';
-import { HttpLoggingExceptionFilter } from '../../../../modules/core/infrastructure/exception-filters/http-logging.exception-filter';
-import { HttpLoggingInterceptor } from '../../../../modules/core/infrastructure/interceptors/http-logging.interceptors';
 import { JwtAuthGuard } from 'src/modules/auth/jwt/jwt-auth.guard';
 import { RolesGuard } from 'src/modules/auth/rbac/roles.guard';
-import { Roles } from 'src/modules/auth/rbac/roles.decorator';
-import { Role } from 'src/modules/auth/rbac/role.enum';
+
+import { HttpLoggingExceptionFilter } from '../../../../modules/core/infrastructure/exception-filters/http-logging.exception-filter';
+import { HttpLoggingInterceptor } from '../../../../modules/core/infrastructure/interceptors/http-logging.interceptors';
+import { CreateTodoCommand } from '../../application/commands/create-todo.command';
+import { DeleteTodoCommand } from '../../application/commands/delete-todo.command';
+import { GetTodosQuery } from '../../application/queries/get-todos.query';
+import { CreateTodoDto } from '../dtos/create-todo.dto';
+import type { Todo } from '../entities/todos.entity';
 
 @ApiTags('todos')
 @ApiBearerAuth()
@@ -46,8 +43,7 @@ export class TodosController {
   @Get()
   // @Roles(Role.User)
   @UseGuards(JwtAuthGuard)
-  async getTodos(@Request() req): Promise<Todo[]> {
-    console.log(req.get('authorization'), req.user);
+  async getTodos(): Promise<Todo[]> {
     const todos = await this.queryBus.execute(new GetTodosQuery());
     return todos;
   }

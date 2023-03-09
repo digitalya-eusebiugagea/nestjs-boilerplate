@@ -1,9 +1,10 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Pagination } from 'src/database/pagination';
+import type { Pagination } from 'src/database/pagination';
 import { Repository } from 'typeorm';
-import { CreateUserDto } from './create-user.dto';
-import { PaginatedUsersDto } from './paginated-users.dto';
+
+import type { CreateUserDto } from './create-user.dto';
+import type { PaginatedUsersDto } from './paginated-users.dto';
 import { User } from './user.entity';
 
 @Injectable()

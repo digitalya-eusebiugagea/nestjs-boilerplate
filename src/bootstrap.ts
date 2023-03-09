@@ -1,15 +1,15 @@
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory, Reflector } from '@nestjs/core';
-import { WinstonModule } from 'nest-winston';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { initializeTransactionalContext } from 'typeorm-transactional';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import helmet from 'helmet';
+import { WinstonModule } from 'nest-winston';
+import { initializeTransactionalContext } from 'typeorm-transactional';
 
 import { AppModule } from './app.module';
-import validationOptions from './modules/core/infrastructure/pipes/validation-options';
 import logger from './logger';
 import { markExecutionStartTimeMiddleware } from './modules/core/infrastructure/middlewares/mark-execution-start-time.middleware';
+import validationOptions from './modules/core/infrastructure/pipes/validation-options';
 
 async function bootstrap() {
   initializeTransactionalContext();
