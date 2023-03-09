@@ -1,14 +1,17 @@
-import { Controller, Request, Post, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import { User } from './../users/user.entity';
+import { CreateUserDto } from '../users/create-user.dto';
+import { Controller, Request, Post, UseGuards, Body } from '@nestjs/common';
 import {
   ApiBody,
+  ApiCreatedResponse,
   ApiInternalServerErrorResponse,
   ApiNotFoundResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
-import { LocalAuthGuard } from './local-auth.guard';
-import { LoginDto } from './login.dto';
+import { LocalAuthGuard } from './local/local-auth.guard';
+import { UsersService } from '../users/users.service';
+import { LoginResponseDto } from './login-response.dto';
 
 @ApiTags('auth')
 @Controller({
@@ -16,11 +19,21 @@ import { LoginDto } from './login.dto';
   version: '1',
 })
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private usersService: UsersService) {}
 
-  @UseGuards(LocalAuthGuard)
+  @Post('signup')
+  @ApiCreatedResponse({ type: User })
+  async signup(@Body() createUserDto: CreateUserDto) {
+    const user = await this.usersService.create(createUserDto);
+    const token = await this.authService.signup(user);
+
+    return { ...user, token };
+  }
+
   @Post('login')
-  @ApiBody({ type: LoginDto })
+  @UseGuards(LocalAuthGuard)
+  @ApiBody({ type: CreateUserDto })
+  @ApiCreatedResponse({ type: LoginResponseDto })
   @ApiNotFoundResponse()
   @ApiInternalServerErrorResponse()
   async login(@Request() req) {

@@ -26,7 +26,7 @@ import { CreateTodoCommand } from '../../application/commands/create-todo.comman
 import { DeleteTodoCommand } from '../../application/commands/delete-todo.command';
 import { HttpLoggingExceptionFilter } from '../../../../modules/core/infrastructure/exception-filters/http-logging.exception-filter';
 import { HttpLoggingInterceptor } from '../../../../modules/core/infrastructure/interceptors/http-logging.interceptors';
-import { JwtAuthGuard } from 'src/modules/auth/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/modules/auth/jwt/jwt-auth.guard';
 import { RolesGuard } from 'src/modules/auth/rbac/roles.guard';
 import { Roles } from 'src/modules/auth/rbac/roles.decorator';
 import { Role } from 'src/modules/auth/rbac/role.enum';
@@ -41,16 +41,13 @@ import { Role } from 'src/modules/auth/rbac/role.enum';
 @UseInterceptors(HttpLoggingInterceptor)
 @UseFilters(HttpLoggingExceptionFilter)
 export class TodosController {
-  constructor(
-    private readonly queryBus: QueryBus,
-    private readonly commandBus: CommandBus,
-  ) {}
+  constructor(private readonly queryBus: QueryBus, private readonly commandBus: CommandBus) {}
 
   @Get()
-  @Roles(Role.User)
+  // @Roles(Role.User)
   @UseGuards(JwtAuthGuard)
   async getTodos(@Request() req): Promise<Todo[]> {
-    console.log(req.get('authorization'));
+    console.log(req.get('authorization'), req.user);
     const todos = await this.queryBus.execute(new GetTodosQuery());
     return todos;
   }

@@ -21,4 +21,7 @@ export const AppDataSource = new DataSource({
     migrationsDir: 'src/database/migrations',
     subscribersDir: 'subscriber',
   },
+  extra: {
+    ssl: true,
+  },
 } as DataSourceOptions);
