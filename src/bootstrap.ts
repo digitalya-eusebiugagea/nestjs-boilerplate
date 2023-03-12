@@ -1,4 +1,4 @@
-import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
+import { ClassSerializerInterceptor, ValidationPipe, VersioningType } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory, Reflector } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -22,12 +22,15 @@ async function bootstrap() {
 
   const configService = app.get(ConfigService);
 
+  // -- Api prefix
   app.setGlobalPrefix(configService.get('app.apiPrefix'), {
     exclude: ['/'],
   });
 
   // -- Versioning -- URI
-  app.enableVersioning();
+  app.enableVersioning({
+    type: VersioningType.URI,
+  });
 
   // -- Cors setup
   app.enableCors();
