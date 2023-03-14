@@ -1,7 +1,7 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import type { Pagination } from 'src/database/pagination';
-import { Repository } from 'typeorm';
+import type { PaginationFilterOrderRelations } from 'src/modules/core/infrastructure/complex-query/complex-query';
+import { EntityPropertyNotFoundError, Repository } from 'typeorm';
 
 import type { CreateUserDto } from './create-user.dto';
 import type { PaginatedUsersDto } from './paginated-users.dto';
@@ -15,13 +15,24 @@ export class UsersService {
     private readonly logger: Logger,
   ) {}
 
-  async findAll({ take, skip }: Pagination): Promise<PaginatedUsersDto> {
-    const [result, count] = await this.usersRepository.findAndCount({
-      take,
-      skip,
-    });
+  async findAll(args: PaginationFilterOrderRelations): Promise<PaginatedUsersDto> {
+    try {
+      const [result, count] = await this.usersRepository.findAndCount({
+        take: args.pagination.take,
+        skip: args.pagination.skip,
+        where: args.filter,
+        order: args.order,
+        relations: args.relations,
+      });
 
-    return { count, result };
+      return { count, result };
+    } catch (err) {
+      if (err instanceof EntityPropertyNotFoundError) {
+        throw new BadRequestException('Filters are not correct');
+      }
+
+      throw err;
+    }
   }
 
   async findById(userId: string): Promise<User> {
